@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AiRouteImport } from './routes/ai'
+import { Route as AppsRouteImport } from './routes/apps'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,35 +29,44 @@ const AiRoute = AiRouteImport.update({
   path: '/ai',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppsRoute = AppsRouteImport.update({
+  id: '/apps',
+  path: '/apps',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/ai': typeof AiRoute
+  '/apps': typeof AppsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/ai': typeof AiRoute
+  '/apps': typeof AppsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/ai': typeof AiRoute
+  '/apps': typeof AppsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/ai'
+  fullPaths: '/' | '/about' | '/ai' | '/apps'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/ai'
-  id: '__root__' | '/' | '/about' | '/ai'
+  to: '/' | '/about' | '/ai' | '/apps'
+  id: '__root__' | '/' | '/about' | '/ai' | '/apps'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AiRoute: typeof AiRoute
+  AppsRoute: typeof AppsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +92,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AiRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/apps': {
+      id: '/apps'
+      path: '/apps'
+      fullPath: '/apps'
+      preLoaderRoute: typeof AppsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AiRoute: AiRoute,
+  AppsRoute: AppsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
