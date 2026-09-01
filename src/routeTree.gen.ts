@@ -14,6 +14,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AiRouteImport } from './routes/ai'
 import { Route as AppsRouteImport } from './routes/apps'
 import { Route as CodeRouteImport } from './routes/code'
+import { Route as GamesRouteImport } from './routes/games'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,6 +41,11 @@ const CodeRoute = CodeRouteImport.update({
   path: '/code',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GamesRoute = GamesRouteImport.update({
+  id: '/games',
+  path: '/games',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/ai': typeof AiRoute
   '/apps': typeof AppsRoute
   '/code': typeof CodeRoute
+  '/games': typeof GamesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/ai': typeof AiRoute
   '/apps': typeof AppsRoute
   '/code': typeof CodeRoute
+  '/games': typeof GamesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +70,14 @@ export interface FileRoutesById {
   '/ai': typeof AiRoute
   '/apps': typeof AppsRoute
   '/code': typeof CodeRoute
+  '/games': typeof GamesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/ai' | '/apps' | '/code'
+  fullPaths: '/' | '/about' | '/ai' | '/apps' | '/code' | '/games'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/ai' | '/apps' | '/code'
-  id: '__root__' | '/' | '/about' | '/ai' | '/apps' | '/code'
+  to: '/' | '/about' | '/ai' | '/apps' | '/code' | '/games'
+  id: '__root__' | '/' | '/about' | '/ai' | '/apps' | '/code' | '/games'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,6 +86,7 @@ export interface RootRouteChildren {
   AiRoute: typeof AiRoute
   AppsRoute: typeof AppsRoute
   CodeRoute: typeof CodeRoute
+  GamesRoute: typeof GamesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -116,6 +126,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CodeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/games': {
+      id: '/games'
+      path: '/games'
+      fullPath: '/games'
+      preLoaderRoute: typeof GamesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -125,6 +142,7 @@ const rootRouteChildren: RootRouteChildren = {
   AiRoute: AiRoute,
   AppsRoute: AppsRoute,
   CodeRoute: CodeRoute,
+  GamesRoute: GamesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
