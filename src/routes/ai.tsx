@@ -81,36 +81,36 @@ function AiPage() {
     if (!content) return;
     setDraft("");
     const userMsg: Msg = { role: "user", content, at: Date.now() };
+    const targetId = active?.id ?? newConversation().id;
 
     setConvos((prev) => {
-      const list = prev.length ? [...prev] : [newConversation()];
-      const id = active?.id ?? list[0].id;
-      const idx = list.findIndex((c) => c.id === id);
-      const target = list[idx] ?? list[0];
+      const list = [...prev];
+      const idx = list.findIndex((c) => c.id === targetId);
+      const base: Conversation = list[idx] ?? { ...newConversation(), id: targetId };
       const updated: Conversation = {
-        ...target,
-        title: target.messages.length ? target.title : content.slice(0, 38),
-        messages: [...target.messages, userMsg],
+        ...base,
+        title: base.messages.length ? base.title : content.slice(0, 38),
+        messages: [...base.messages, userMsg],
         at: Date.now(),
       };
-      list[idx >= 0 ? idx : 0] = updated;
-      setActiveId(updated.id);
+      if (idx >= 0) list[idx] = updated;
+      else list.unshift(updated);
       return list;
     });
+    setActiveId(targetId);
 
     setTyping(true);
     window.setTimeout(() => {
       const reply: Msg = { role: "assistant", content: demoReply(content), at: Date.now() };
       setConvos((prev) =>
         prev.map((c) =>
-          c.id === (active?.id ?? prev[0]?.id)
-            ? { ...c, messages: [...c.messages, reply], at: Date.now() }
-            : c,
+          c.id === targetId ? { ...c, messages: [...c.messages, reply], at: Date.now() } : c,
         ),
       );
       setTyping(false);
     }, 550);
   }
+
 
   function startNew() {
     const c = newConversation();
